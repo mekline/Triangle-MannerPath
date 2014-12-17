@@ -6,6 +6,12 @@ library(dplyr)
 library(rjson)
 library(RSQLite)
 library(stringr)
+library(ggplot2)
+library(Hmisc)
+
+mean.na.rm <- function(x) { mean(x,na.rm=T) }
+sum.na.rm <- function(x) { sum(x,na.rm=T) }
+stderr <- function(x) sqrt(var(x)/length(x))
 
 # Read data ---------------------------------------------------------------
 
@@ -59,10 +65,12 @@ for (i in 1:nrow(df.wide)){
     }
   }
 } #End of this participant
-#Weird behavior!  If a cell is not assigned, R is filling it in with the values from the first row.  What?!  Anyway I made it stop but not sure how.  Explore this more.
-#I got those wrong-lenght participants to be assigned a participant no of NA, which is something, anyway.
 
-
+#Weird behavior! I got those wrong-lenght participants to be assigned a participant no of NA, which is something, anyway.
+#Lost 6 people to this.
+nrow(df.wide)
+df.wide = df.wide[!is.na(df.wide$participant),]
+nrow(df.wide)
 
 
 #Reformat into long form!
@@ -78,3 +86,56 @@ df.long = mutate(df.long, participant = as.numeric(participant),
           condition = factor(condition, levels=c("Noun","Verb")))
 
 df.long = df.long[order(df.long$participant,df.long$trial),]
+
+#Analyze data!--------------------------------------------------
+
+#For each participant, make a score, which is abs(mean(mannerchange)-mean(pathchange))
+
+mannerScores = aggregate(df.long[df.long$stimcondition=="mannerchange",]$keypress, by=list(df.long[df.long$stimcondition=="mannerchange",]$participant, df.long[df.long$stimcondition=="mannerchange",]$condition), mean.na.rm)
+names(mannerScores) = c("participant", "condition", "mannerscore")
+pathScores = aggregate(df.long[df.long$stimcondition=="pathchange",]$keypress, by=list(df.long[df.long$stimcondition=="pathchange",]$participant, df.long[df.long$stimcondition=="pathchange",]$condition), mean.na.rm)
+names(pathScores) = c("participant", "condition", "pathscore")
+
+Scores = merge(mannerScores, pathScores, by=c("participant", "condition"))
+
+Scores$diffscore = abs(Scores$mannerscore - Scores$pathscore)
+with(Scores, tapply(diffscore, list(condition), mean, na.rm=TRUE), drop=TRUE)
+with(Scores, tapply(ILikeMannerscore, list(condition), stderr), drop=TRUE)
+
+Scores$ILikeMannerscore = Scores$pathscore - Scores$mannerscore
+with(Scores, tapply(ILikeMannerscore, list(condition), mean, na.rm=TRUE), drop=TRUE)
+with(Scores, tapply(ILikeMannerscore, list(condition),stderr), drop=TRUE)
+
+#And let's do a dead simple t test on that
+
+t.test(Scores[Scores$condition == "Noun",]$diffscore, Scores[Scores$condition == "Verb",]$diffscore)
+cohensD(Scores[Scores$condition == "Noun",]$diffscore, Scores[Scores$condition == "Verb",]$diffscore)
+
+
+
+#Graph data------------------------------------------------
+
+##Summarize the data for graphing
+data.summary.diffscores <- data.frame(
+  condition=levels(Scores$condition),
+  mean=with(Scores, tapply(diffscore, list(condition), mean, na.rm=TRUE), drop=TRUE),
+  n=with(Scores, tapply(diffscore, list(condition), length)),
+  se=with(Scores, tapply(ILikeMannerscore, list(condition), stderr), drop=TRUE)
+)
+
+# Precalculate margin of error for confidence interval
+data.summary.diffscores$me <- qt(1-0.05/2, df=data.summary.diffscores$n)*data.summary.diffscores$se
+
+# Use ggplot to draw the bar plot!
+png('simpledax-barplot-se.png') # Write to PNG
+ggplot(data.summary.diffscores, aes(x = condition, y = mean)) +  
+  geom_bar(position = position_dodge(), stat="identity", fill="brown") + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=0.25) +
+  ylim(0,6) +
+  ylab("Abs(mean(manner) - mean(path))")+
+  xlab("")+
+  ggtitle("Rating of manner vs. path changes") + # plot title
+  theme_bw() + # remove grey background (because Tufte said so)
+  theme(panel.grid.major = element_blank()) # remove x and y major grid lines (because Tufte said so)
+dev.off() # Close PNG
+
