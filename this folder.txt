@@ -1,0 +1,3 @@
+Tested 100 subjects on the noun/verb basic mannerPath experiment!  
+
+Note that previous experiment participants are in the participants.db; participant.db tracks everyone so psiturk can screen repeats.  I have a few options for finding current version ppl (thisTrial=1) but want a better one for later (set experimentVersion variable…)
