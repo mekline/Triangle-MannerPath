@@ -3,6 +3,7 @@ function new_img = traceImg(img, backimg, x,y)
 %This actually just draws a dot in the center of the img, 
 %again making sure nothing falls off the 
 %color spectrum or edge of the image!
+%x,y is the top lh corner
 
 img = uint8(img);
 backimg = uint8(backimg);
