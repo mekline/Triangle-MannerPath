@@ -6,3 +6,5 @@ Participants.db - the data. It’s a big sqlite database with JSON formatted dat
 MK_psiturk_data.R - analyzes participants.db, taking just the subjects from the 12-11-14 run. Mostly based on code from Tobi G.
 
 simpledax-jpsych-psiturk-experiment_12_12_14 - the experiment, runs in psiturk.
+
+Now I’ve added it to the Mac GIT gui.  Does it work?
