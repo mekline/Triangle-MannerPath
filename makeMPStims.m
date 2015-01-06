@@ -1,14 +1,13 @@
 lens = 120; %Number of (motion) frames, here set to 4 sec for all movies.
 currentFolder = pwd;
 
-[x, y] = getPath('underup', lens); %x and y are the midpoints of the object, so imrotate can work correctly...
+[x, y] = getPath('basicOnto', lens); %x and y are the midpoints of the object, so imrotate can work correctly...
 [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
  
-[x, y, rotations] = applyManner('rock', x,y);
+[x, y, rotations] = applyManner('halfrotate', x,y);
 
-
- mode = 'movie';
- %mode = 'pilot';
+mode = 'movie';
+%mode = 'pilot';
 
 
 

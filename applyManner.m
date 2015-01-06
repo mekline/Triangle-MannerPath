@@ -35,15 +35,20 @@ switch mannername
         xman = x + sin(40*2*pi*(y-y(1))/(y(end)-y(1)))*5;
         yman = y;
     case 'rock' %rotate over the 90 deg. around upright, start & end up vertical
-        t = 1:lens
+        t = 1:lens;
         rotations = 30*sawtooth((lens/5)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
         xman = x;
         yman = y;
     case 'halfrotate' %rotate ~180 deg, start & end up vertical
-        t = 1:lens
+        t = 1:lens;
         rotations = 180*sawtooth((lens/10)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
         xman = x;
         yman = y;
+    
+    case 'backandforth'
+        rotations = zeros(lens,1);
+        xman = x + sin(5*2*pi*(y-y(1))/(y(end)-y(1)));
+        yman = y + (sin(5*2*pi*(y-y(1))/(y(end)-y(1)))*50);
 end
 
 
