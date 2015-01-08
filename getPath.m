@@ -1,4 +1,4 @@
-function [x, y] = getPath(pathname,lens)
+function [x, y, lens] = getPath(pathname)
 
 %Important points in the image (start, 'above', etc.); coded by top lh corner
 points = [300 50;
@@ -16,11 +16,13 @@ points = [300 50;
 switch pathname
     case 'basicOnto'
         %Let's get a (simple) straight line path to animate!
+        lens = 120;
         startpos = points(1,:);
         endpos = points(8,:);
         x = startpos(1):(endpos(1)-startpos(1))/(lens-1):endpos(1);
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);%length = lens!
     case 'still'
+        lens = 120;
         %Holds x and y in place, nice for testing rotation and such
         x = ones(lens,1)*200;
         y = ones(lens,1)*200;
@@ -29,6 +31,7 @@ switch pathname
     %(OK, here's the real ones!)
     %
     case 'past'
+        lens = 150;
         %straight path under bridge to other side
         startpos = points(1,:);
         endpos = points(6,:);
@@ -36,30 +39,35 @@ switch pathname
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'above'
         %straight path to above bridge
+        lens = 120;
         startpos = points(1,:);
         endpos = points(7,:);
         x = startpos(1):(endpos(1)-startpos(1))/(lens-1):endpos(1);
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'under'
         %straight path to under the bridge...
+        lens = 120;
         startpos = points(1,:);
         endpos = points(4,:);
         x = ones(lens,1)*startpos(1); %stays constant!)
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'to'
         %straight path to the edge of the bridge!
+        lens = 60;
         startpos = points(1,:);
         endpos = points(3,:);
         x = ones(lens,1)*startpos(1); %stays constant!)
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'tofar'
         %straight path to the far edge of the bridge
+        lens = 150;
         startpos = points(1,:);
         endpos = points(10,:);
         x = ones(lens,1)*startpos(1); %stays constant!)
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'along'
         %straight segments to and then along the bridge!
+        lens = 120;
         startpos = points(1,:);
         endpos = points(11,:);
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
@@ -71,9 +79,9 @@ switch pathname
                 x(i) = 175;
             end
         end
-
     case 'underup'
         %Curved path up to touch the bottom of the bridge
+        lens = 120;
         startpos = points(1,:);
         endpos = points(9,:);
         x = startpos(1):(endpos(1)-startpos(1))/(lens-1):endpos(1);

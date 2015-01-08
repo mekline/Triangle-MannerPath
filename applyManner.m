@@ -30,7 +30,7 @@ switch mannername
         rotations = zeros(lens,1);
         xman = x - abs(sin(5*2*pi*(y-y(1))/(y(end)-y(1)))*20);
         yman = y;
-    case 'vibrate' %just a very fast and small-amplitude sine...
+    case 'vibrate' %just a very fast and small-amplitude sine...no need to adjust for path length
         rotations = zeros(lens,1);
         xman = x + sin(40*2*pi*(y-y(1))/(y(end)-y(1)))*5;
         yman = y;
@@ -41,7 +41,7 @@ switch mannername
         yman = y;
     case 'halfrotate' %rotate ~180 deg, start & end up vertical
         t = 1:lens;
-        rotations = 180*sawtooth((lens/10)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
+        rotations = 90*sawtooth((lens/10)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
         xman = x;
         yman = y;
     
