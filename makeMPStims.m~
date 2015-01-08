@@ -5,10 +5,10 @@ currentFolder = pwd;
 %bridge front tells whether to draw the bridge in front of the triangle.
 [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
  
-[x, y, rotations] = applyManner('none', x,y);
+[x, y, rotations] = applyManner('sineWave', x,y);
 
-mode = 'movie';
-%mode = 'pilot';
+%mode = 'movie';
+mode = 'pilot';
 
 
 
@@ -57,10 +57,6 @@ for obj = 1:1
             if bridgeFront(i)
                 withbridge = drawOnBackground(bridgeimg, backimg, 1, 1);
                 newimg = moveImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
-            else
-                nobridge = moveImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
-                newimg = drawOnBackground(bridgeimg, nobridge, 1, 1);
-            end
             m(i+30) = getframe;
             image(newimg);
             axis off;
