@@ -27,6 +27,21 @@ switch mannername
         rotations = 0:(-360*rots/(lens-1)):(-360*rots); %Four complete rotations
         xman = x;
         yman = y;
+   case 'halfrotate' %rotate ~180 deg, start & end up vertical
+        t = 1:lens;
+        %~ 1 bops per second
+        mult = floor(lens/30);
+        rotations = 100*sawtooth((mult)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
+        xman = x;
+        yman = y;
+    case 'rock' %rotate over the 90 deg. around upright, start & end up vertical
+        t = 1:lens;
+        %~ 6 bops per second
+        mult = floor(lens/30)*6;
+        rotations = 30*sawtooth((mult)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
+        xman = x;
+        yman = y;
+
         
     case 'sineWave' % 5 complete sines over the path (looks bad on length changes!)
         rotations = zeros(lens,1);
@@ -37,16 +52,7 @@ switch mannername
         xman = x - abs(sin(5*2*pi*(y-y(1))/(y(end)-y(1)))*20);
         yman = y;
 
-    case 'rock' %rotate over the 90 deg. around upright, start & end up vertical
-        t = 1:lens;
-        rotations = 30*sawtooth((lens/5)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
-        xman = x;
-        yman = y;
-    case 'halfrotate' %rotate ~180 deg, start & end up vertical
-        t = 1:lens;
-        rotations = 90*sawtooth((lens/10)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
-        xman = x;
-        yman = y;
+
     
     case 'backandforth'
         rotations = zeros(lens,1);
