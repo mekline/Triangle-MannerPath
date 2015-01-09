@@ -160,6 +160,7 @@ switch pathname
         startpos = points(1,:);
         endpos = points(8,:);
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);%length = lens!
-        x = 0.0029*(y).^2-1.*y+389.29;
+        x = 0.0029*(y).^2-1.929*y+389.29;
+    case '
     
 end

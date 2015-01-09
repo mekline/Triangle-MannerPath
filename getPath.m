@@ -7,12 +7,13 @@ points = [300 50;
     300 450;
     300 650; 
     300 700; 
-    0 450; 
+    50 450; 
     100 450; 
     250 450;
     300 600;
     150 550;
-    300 300];
+    300 300;
+    450 600];
 
 switch pathname
     case 'basicOnto'
@@ -51,7 +52,7 @@ switch pathname
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'under'
         %straight path to under the bridge...
-        lens = 120;
+        lens = 90;
         bridgeFront = zeros(lens, 1);
         startpos = points(1,:);
         endpos = points(4,:);
@@ -59,7 +60,7 @@ switch pathname
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'to'
         %straight path to the edge of the bridge!
-        lens = 60;
+        lens = 45;
         bridgeFront = zeros(lens, 1);
         startpos = points(1,:);
         endpos = points(3,:);
@@ -70,12 +71,12 @@ switch pathname
         lens = 60;
         bridgeFront = ones(lens, 1);
         startpos = points(1,:);
-        endpos = points(3,:);
+        endpos = points(12,:);
         x = ones(lens,1)*startpos(1); %stays constant!)
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'tofar'
         %straight path to the far edge of the bridge
-        lens = 150;
+        lens = 135;
         bridgeFront = zeros(lens, 1);
         startpos = points(1,:);
         endpos = points(10,:);
@@ -98,7 +99,7 @@ switch pathname
         end
     case 'underup'
         %Curved path up to touch the bottom of the bridge
-        lens = 120;
+        lens = 90;
         bridgeFront = zeros(lens, 1);
         startpos = points(1,:);
         endpos = points(9,:);
@@ -111,7 +112,7 @@ switch pathname
         y = sqrt(b^2*(1-((x-h).^2/a^2)))+k;
     case 'over'
         %Curved path over the top of the bridge to other side
-        lens = 150;
+        lens = 180;
         bridgeFront = zeros(lens, 1);
         startpos = points(1,:);
         endpos = points(6,:);
@@ -155,11 +156,19 @@ switch pathname
         y = [straight_y down_y back_y];
     case 'onto'
         %Curved from starting point to top!
-        lens = 120;
+        lens = 135;
         bridgeFront = zeros(lens, 1);
         startpos = points(1,:);
         endpos = points(8,:);
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);%length = lens!
         x = 0.0029*(y).^2-1.929*y+389.29;
+    case 'underfar'
+        %Straight path ending like 'tofar' but in front of the bridge
+        lens = 150;
+        bridgeFront = zeros(lens, 1);
+        startpos = points(1,:);
+        endpos = points(13,:);
+        x = startpos(1):(endpos(1)-startpos(1))/(lens-1):endpos(1);
+        y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     
 end
