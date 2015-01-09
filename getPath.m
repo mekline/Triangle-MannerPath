@@ -153,6 +153,13 @@ switch pathname
         %put them together
         x = [straight_x down_x back_x];
         y = [straight_y down_y back_y];
-        
+    case 'onto'
+        %Curved from starting point to top!
+        lens = 120;
+        bridgeFront = zeros(lens, 1);
+        startpos = points(1,:);
+        endpos = points(8,:);
+        y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);%length = lens!
+        x = 0.0029*(y).^2-1.929*y+389.29;
     
 end

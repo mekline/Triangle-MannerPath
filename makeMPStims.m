@@ -1,6 +1,6 @@
 currentFolder = pwd;
 
-[x, y, lens, bridgeFront] = getPath('circle'); %x and y are the top lh corner of the object
+[x, y, lens, bridgeFront] = getPath('onto'); %x and y are the top lh corner of the object
 %lens is number of (motion) frames, 30 = 1 sec
 %bridge front tells whether to draw the bridge in front of the triangle.
 [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
