@@ -19,7 +19,8 @@ switch mannername
     %OK, here's the real ones
     case 'vibrate' %just a very fast and small-amplitude sine...no need to adjust for path length
         rotations = zeros(lens,1);
-        xman = x + sin(40*2*pi*(y-250)/(450))*4;
+        t = 1:lens;
+        xman = x + sin(40*2*pi*(t-250)/(450))*4;
         yman = y;
     case 'rotate'
         %rotations? ~ 1 per second, rounded down
@@ -40,16 +41,20 @@ switch mannername
         mult = floor(lens/30)*6;
         rotations = 30*sawtooth((mult)*pi*(t-t(1))/(t(end)-t(1))+pi/2, 0.5);
         xman = x;
-        yman = y;
-
-        
-    case 'sineWave' % 5 complete sines over the path (looks bad on length changes!)
+        yman = y; 
+    case 'sineWave' 
+        % 3 complete sines per ~second
         rotations = zeros(lens,1);
-        xman = x + sin(5*2*pi*(y-y(1))/(y(end)-y(1)))*20;
+        numSin = floor(lens/30)*3;
+        t = 1:lens;
+        xman = x + transpose(sin(numSin*2*pi*t/lens)*20);
         yman = y;
-    case 'bounce' %Abs the above
+    case 'bounce' 
+        %Abs the above, 2 bounce per second
         rotations = zeros(lens,1);
-        xman = x - abs(sin(5*2*pi*(y-y(1))/(y(end)-y(1)))*20);
+        numSin = floor(lens/30);
+        t = 1:lens;
+        xman = x - abs(transpose(sin(numSin*2*pi*t/lens)*20));
         yman = y;
 
 
