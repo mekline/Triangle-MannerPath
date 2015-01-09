@@ -12,6 +12,7 @@ tolerance = 140;
 
 newImg = backimg;
 
+
 for i=1:q
     for j=1:r
         pix = img(i, j, :); %Get that pixel in the img

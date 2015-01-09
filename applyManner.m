@@ -32,7 +32,7 @@ switch mannername
         yman = y;
     case 'vibrate' %just a very fast and small-amplitude sine...no need to adjust for path length
         rotations = zeros(lens,1);
-        xman = x + sin(40*2*pi*(y-y(1))/(y(end)-y(1)))*5;
+        xman = x + sin(40*2*pi*(y-250)/(450))*4;
         yman = y;
     case 'rock' %rotate over the 90 deg. around upright, start & end up vertical
         t = 1:lens;
