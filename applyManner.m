@@ -56,7 +56,40 @@ switch mannername
         t = 1:lens;
         xman = x - abs(transpose(sin(numSin*2*pi*t/lens)*20));
         yman = y;
-
+    case 'stopstart'
+        %Takes the existing points, and execute them on another timescale
+        %Split the arrays into that many sets. In each set, eliminate every 4th point (speeds up) then hold at
+        %the end
+        rotations = zeros(lens,1);
+        numPause = floor(lens/30)*2;
+        final_x = [];
+        final_y = [];
+        t = 1;
+        
+        for j = 1:numPause
+            t2 = floor(j*lens/numPause);
+            myset = [x(t:t2) y(t:t2)];
+            new_x = [];
+            new_y = [];
+            lastpoint = myset(end, :);
+            for k=1:length(myset)
+                if mod(k,3) ~= 0
+                    new_x(end+1) = myset(k,1);
+                    new_y(end+1) = myset(k,2);
+                end
+            end  
+            [new_x, new_y] = smoothPath(new_x,new_y);
+            lenLeft = (t2-t)-length(new_x);
+            new_x = [new_x; ones(lenLeft,1)*lastpoint(1)];
+            new_y = [new_y; ones(lenLeft,1)*lastpoint(2)];
+            final_x = [final_x transpose(new_x)];
+            final_y = [final_y transpose(new_y)];
+            
+            t = t2;
+        end
+        
+        xman = final_x;
+        yman = final_y;
 
     
     case 'backandforth'
