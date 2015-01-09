@@ -21,13 +21,11 @@ switch mannername
         rotations = zeros(lens,1);
         xman = x + sin(40*2*pi*(y-250)/(450))*4;
         yman = y;
+    
     case 'rotate'
-        %rotations? ~ 1 per second, rounded down
-        rots = floor(lens/30);
-        rotations = 0:(-360*rots/(lens-1)):(-360*rots); %Four complete rotations
+        rotations = 0:(-360*4/(lens-1)):(-360*4); %Four complete rotations
         xman = x;
         yman = y;
-        
     case 'sineWave' % 5 complete sines over the path (looks bad on length changes!)
         rotations = zeros(lens,1);
         xman = x + sin(5*2*pi*(y-y(1))/(y(end)-y(1)))*20;
