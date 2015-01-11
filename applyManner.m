@@ -197,7 +197,7 @@ switch mannername
         yman = [vib_y rest_y];
         rotations = zeros(length(xman),1);
         
-    case 'skid'
+    case 'wheelie'
         %This one tilts up on the corner at the beginning, and then back
         %down at the end.  NBD.
         xman = x;

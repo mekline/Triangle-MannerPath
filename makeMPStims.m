@@ -1,7 +1,10 @@
 function makeMPStims(manners, paths,mode)
 %Full set of paths & manners:
-%{'vibrate','rotate','halfrotate','rock','sine','bounce','loop','stopstart','squarewave','backforth','zip','skid'}
+%{'vibrate','rotate','halfrotate','rock','sine','bounce','loop','stopstart','squarewave','backforth','zip','wheelie'}
 %{'past','above','under','to','behind','tofar','along','underup','over',circle','onto','underfar'}
+%
+%modes: 'pilot' just shows traces quickly, 'movies' exports videos to
+%movies folder
 
 currentFolder = pwd;
 
@@ -56,6 +59,7 @@ for a=1:length(manners)
 
                 for j=1:30
                     image(newimg);
+                    axis off;
                     m(j) = getframe;
                     drawnow;
                 end
@@ -77,6 +81,7 @@ for a=1:length(manners)
                         end
                     m(i+30) = getframe;
                     image(newimg);
+                    axis off;
                     drawnow;
                 end
 
@@ -84,12 +89,13 @@ for a=1:length(manners)
                 for k = 1:60
                     m(k+lens+30) = getframe;
                     image(newimg);
+                    axis off;
                     drawnow;
                 end
 
                 %Convert m to a movie :)
                 %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
-                w = VideoWriter([num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
+                w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
                 w.FrameRate = 30;
                 open(w);
                 writeVideo(w,m);
