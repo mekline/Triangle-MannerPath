@@ -1,14 +1,14 @@
 currentFolder = pwd;
 
-[x, y, lens, bridgeFront] = getPath('underup'); %x and y are the top lh corner of the object
+[x, y, lens, bridgeFront] = getPath('to'); %x and y are the top lh corner of the object
 %lens is number of (motion) frames, 30 = 1 sec
 %bridge front tells whether to draw the bridge in front of the triangle.
 [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
  
 [x, y, rotations] = applyManner('loop', x,y);
 
-%mode = 'movie';
-mode = 'pilot';
+mode = 'movie';
+%mode = 'pilot';
 
 
 
@@ -76,7 +76,12 @@ for obj = 1:1
         end
         
         %Convert m to a movie :)
-        movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
+        %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
+        w = VideoWriter([num2str(obj)],'MPEG-4');
+        w.FrameRate = 30;
+        open(w);
+        writeVideo(w,m);
+        close(w);
         
     elseif strcmp(mode,'pilot')
   
