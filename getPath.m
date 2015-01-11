@@ -60,7 +60,7 @@ switch pathname
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     case 'to'
         %straight path to the edge of the bridge!
-        lens = 45;
+        lens = 60;
         bridgeFront = zeros(lens, 1);
         startpos = points(1,:);
         endpos = points(3,:);
