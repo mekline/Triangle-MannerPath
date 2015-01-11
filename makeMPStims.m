@@ -5,7 +5,7 @@ currentFolder = pwd;
 %bridge front tells whether to draw the bridge in front of the triangle.
 [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
  
-[x, y, rotations] = applyManner('zip', x,y);
+[x, y, rotations] = applyManner('skid', x,y);
 
 %special case! lens may have gotten longer, watch out:
 if (lens < length(x))

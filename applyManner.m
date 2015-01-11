@@ -173,8 +173,7 @@ switch mannername
         [final_x, final_y] = smoothPath(final_x,final_y);
         xman = final_x;
         yman = final_y;
-        
-        
+         
     case 'zip'
         %Vibrates back and forth at the beginning, then zips along
         %the rest of the path. This adds a second to the beginning,
@@ -197,6 +196,15 @@ switch mannername
         xman = [vib_x rest_x];
         yman = [vib_y rest_y];
         rotations = zeros(length(xman),1);
+        
+    case 'skid'
+        %This one tilts up on the corner at the beginning, and then back
+        %down at the end.  NBD.
+        xman = x;
+        yman = y;
+        up = 0:2:30;
+        down = 30:-2:0;
+        rotations = [up ones(1,length(xman)-32)*30 down];
         
     case 'slide'
         %Starts out fast and decelerates!

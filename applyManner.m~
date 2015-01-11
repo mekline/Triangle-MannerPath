@@ -173,14 +173,39 @@ switch mannername
         [final_x, final_y] = smoothPath(final_x,final_y);
         xman = final_x;
         yman = final_y;
-        
-        
+         
     case 'zip'
         %Vibrates back and forth at the beginning, then zips along
-        %the rest of the path.
+        %the rest of the path. This adds a second to the beginning,
+        %then speeds up the path by 1/3
+        vib_x = 300*ones(1, 30);
+        t=1:30;
+        vib_y = 50+sin(60*2*pi*(t-250)/(450))*6;
+        rest_x = [];
+        rest_y = [];
         
-        vib_x = 300*ones(30);
-        vib_y = 
+        for k=1:lens
+            %For each chunk, throw out 1/2 of the points, and smooth
+            %the rest
+            if mod(k,2) ~= 0
+                rest_x(end+1) = x(k);
+                rest_y(end+1) = y(k);
+            end
+        end 
+        
+        xman = [vib_x rest_x];
+        yman = [vib_y rest_y];
+        rotations = zeros(length(xman),1);
+        
+    case 'skid'
+        %This one tilts up on the corner at the beginning, and then back
+        %down at the end.  NBD.
+        xman = x;
+        yman = y;
+        up = 1:2:30;
+        down = 30:2:1;
+        rotations = [up ones(length(xman)-30)*30 down]
+        
     case 'slide'
         %Starts out fast and decelerates!
         %This splits the xy array in 3.  The first part it deletes points
