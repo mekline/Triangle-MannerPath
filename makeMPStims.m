@@ -1,11 +1,11 @@
 currentFolder = pwd;
 
-[x, y, lens, bridgeFront] = getPath('to'); %x and y are the top lh corner of the object
+[x, y, lens, bridgeFront] = getPath('along'); %x and y are the top lh corner of the object
 %lens is number of (motion) frames, 30 = 1 sec
 %bridge front tells whether to draw the bridge in front of the triangle.
 [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
  
-[x, y, rotations] = applyManner('loop', x,y);
+[x, y, rotations] = applyManner('slide', x,y);
 
 mode = 'movie';
 %mode = 'pilot';
