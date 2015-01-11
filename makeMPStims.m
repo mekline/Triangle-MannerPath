@@ -1,15 +1,12 @@
 function makeMPStims(manners, paths,mode)
 %Full set of paths & manners:
 %{'vibrate','rotate','halfrotate','rock','sine','bounce','loop','stopstart','squarewave','backforth','zip','wheelie'}
-%{'past','above','under','to','behind','tofar','along','underup','over',circle','onto','underfar'}
+%{'past','above','under','to','behind','tofar','along','underup','over','circle','onto','underfar'}
 %
 %modes: 'pilot' just shows traces quickly, 'movies' exports videos to
 %movies folder
 
 currentFolder = pwd;
-
-a=1:length(manners)
-b=1:length(paths)
 
 for a=1:length(manners)
     for b=1:length(paths)
@@ -20,14 +17,16 @@ for a=1:length(manners)
         [x, y, lens, bridgeFront] = getPath(mypath); %x and y are the top lh corner of the object
         %lens is number of (motion) frames, 30 = 1 sec
         %bridge front tells whether to draw the bridge in front of the triangle.
+        
         [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
-
         [x, y, rotations] = applyManner(mymanner, x,y);
 
         %special case! lens may have gotten longer, watch out:
         if (lens < length(x))
             bridgeFront = [bridgeFront; repmat(bridgeFront(end),length(x)-lens, 1)]; 
             lens = length(x);
+        elseif (lens > length(x))
+            lens=length(x);
         end
         
         %Get the imgs and make a movie!    

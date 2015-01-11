@@ -172,3 +172,11 @@ switch pathname
         y = startpos(2):(endpos(2)-startpos(2))/(lens-1):endpos(2);
     
 end
+
+%make sure x and y are oriented the right way!
+if size(x,1) == 1
+    x = transpose(x);
+end
+if size(y,1) == 1
+    y = transpose(y);
+end

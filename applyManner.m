@@ -20,7 +20,7 @@ switch mannername
     case 'vibrate' %just a very fast and small-amplitude sine...no need to adjust for path length
         rotations = zeros(lens,1);
         t = 1:lens;
-        xman = x + sin(40*2*pi*(t-250)/(450))*4;
+        xman = transpose(x) + sin(80*2*pi*(t-250)/(450))*4;
         yman = y;
     case 'rotate'
         %rotations? ~ 1 per second, rounded down
@@ -239,6 +239,14 @@ switch mannername
         
         xman = [transpose(new_1_x); second(:,1); new_3_x];
         yman = [transpose(new_1_y); second(:,2); new_3_y];
+end
+
+%make sure x and y are oriented the right way!
+if size(x,1) == 1
+    xman = transpose(xman);
+end
+if size(y,1) == 1
+    yman = transpose(yman);
 end
 
 
