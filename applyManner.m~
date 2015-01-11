@@ -173,6 +173,14 @@ switch mannername
         [final_x, final_y] = smoothPath(final_x,final_y);
         xman = final_x;
         yman = final_y;
+        
+        
+    case 'zip'
+        %Vibrates back and forth at the beginning, then zips along
+        %the rest of the path.
+        
+        vib_x = 300*ones(30);
+        vib_y = 
     case 'slide'
         %Starts out fast and decelerates!
         %This splits the xy array in 3.  The first part it deletes points
@@ -180,6 +188,8 @@ switch mannername
         %The second part it leaves alone
         %The 3rd part it adds to, slowing it down.  
         %I use smoothPath to cheat on all of these.
+        %And sadly, I think this one doesn't maintain a reasonably constant
+        %manner over length/path changes
         rotations = zeros(lens,1);
         first = [x(1:floor(lens/3)) y(1:floor(lens/3))];
         second = [x(ceil(lens/3):floor(2*lens/3)) y(ceil(lens/3):floor(2*lens/3))];
@@ -202,8 +212,8 @@ switch mannername
         new_3 = [third; repmat(third(end,:), lenStolen,1)];
         [new_3_x, new_3_y] = smoothPath(new_3(:,1), new_3(:,2));
         
-        xman = [new_1_; second(:,1); new_3_x];
-        yman = [new_1_y; second(:,2); new_3_y];
+        xman = [transpose(new_1_x); second(:,1); new_3_x];
+        yman = [transpose(new_1_y); second(:,2); new_3_y];
 end
 
 

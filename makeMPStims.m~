@@ -8,10 +8,12 @@ currentFolder = pwd;
 [x, y, rotations] = applyManner('zip', x,y);
 
 %special case! lens may have gotten longer, watch out:
-if (lens < length(x))
-    bridgeFront = [bridgeFront; repmat(bridgeFront(end),length(x)-lens, 1)]; 
-    lens = length(x);
+if lens < length(x)
+    bridgeFront = [bridgeFront; zeros 
+    lens = length(x); %just double checking!
+
 end
+
 mode = 'movie';
 %mode = 'pilot';
 
