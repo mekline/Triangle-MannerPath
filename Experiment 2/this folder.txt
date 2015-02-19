@@ -1,0 +1,14 @@
+Tested 150 subjects on the noun/verb mannerPath experiment with multiple sims!!  
+
+Note that previous experiment participants are in the participants.db; participant.db tracks everyone so psiturk can screen repeats.  I have a few options for finding current version ppl (thisTrial=1) but want a better one for later (set experimentVersion variable…)
+
+Participants.db - the data. It’s a big sqlite database with JSON formatted data inside it., from ALL versions of MannerPath
+ 
+MK_psiturk_data.R - analyzes participants.db, remember to limit it to the current version!
+
+manydax-jpsych-psiturk-experiment_1_13_15 - the experiment, runs in psiturk.
+
+Now I’ve added it to the Mac GIT gui.  Does it work?
+And one more check - did I break git on the reinstall?
+Oh boy, now it’s in OSF too!  Do changes propagate as they should?
+Messed with dropbox.
