@@ -1,6 +1,6 @@
 [HIT Configuration]
 title = Alien Languages Experiment
-description = Respond as quickly as you can
+description = What do these words mean?
 amt_keywords = Language, Psychology, experiment, survey
 lifetime = 24
 us_only = true
@@ -16,8 +16,8 @@ database_url = sqlite:///participants.db
 table_name = turkdemo
 
 [Server Parameters]
-host = 18.93.1.74
-port = 7998
+host = 0.0.0.0
+port = 22362
 cutoff_time = 30
 logfile = server.log
 loglevel = 2
