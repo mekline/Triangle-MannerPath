@@ -22,7 +22,7 @@ for a=1:length(manners)
         %bridge front tells whether to draw the bridge in front of the triangle.
         
         [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
-        [x, y, rotations] = applyManner(mymanner, x,y);
+        [x, y, rotations] = applyManner(mymanner, x, y);
 
         %special case! lens may have gotten longer, watch out:
         if (lens < length(x))
@@ -47,19 +47,24 @@ for a=1:length(manners)
 
             if strcmp(mode,'movie')
 
-                %Because of how imrotate works, the size of img is not guaranteed!  
+                %Because of how imrotate works, the size of img (the agent) is not guaranteed!  
                 %(it adds buffer cells if needed to fit the whole img). But
                 %the midpoint is guaranteed to stay the midpoint!  So let's plot that
                 %instead.
-                % 
+                
                 x = x+50;
                 y = y+50;
 
                 %Draw one boring second of the triangle sitting in initial position!
                 withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
                 newimg = moveImg(img, withbridge, x(1)-50, y(1)-50); 
-
-                for j=1:30
+                
+                prefix = floor((180-lens)/3); %Standardized so that total movie comes out to 180frames
+                postfix = floor(2*(180-lens)/3);
+                
+                for j=1:prefix
+                    %NEW FOR KB - Plot newimg onto the bigger background,
+                    %in the right spot.
                     image(newimg);
                     axis off;
                     m(j) = getframe;
@@ -81,22 +86,24 @@ for a=1:length(manners)
                         withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
                         newimg = moveImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
                         end
-                    m(i+30) = getframe;
+                    
+                    %NEW FOR KB - Plot newimg onto the bigger background,
+                    %in the right spot.    
+                    m(i+prefix) = getframe;
                     image(newimg);
                     axis off;
                     drawnow;
                 end
 
-                %Draw two boring seconds of the final position
-                for k = 1:60
-                    m(k+lens+30) = getframe;
+                %Draw boring final position
+                for k = 1:postfix
+                    %NEW FOR KB - Plot newimg onto the bigger background,
+                    %in the right spot.
+                    m(k+lens+prefix) = getframe;
                     image(newimg);
                     axis off;
                     drawnow;
                 end
-                
-                %Drop/add frames to make movie exactly 6 seconds! Does this
-                %from the edges (at 1/3 2/3 rate) to avoid clipping the moving part.
 
                 %Convert m to a movie :)
                 %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);

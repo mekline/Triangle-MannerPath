@@ -42,23 +42,22 @@ for a=1:length(manners)
 
             bridgeimg = imread([currentFolder '/img/bridge.jpg'],'JPEG'); %read in bg
 
-            %Draw them to obj m
+            %Now use the above calculated path to draw them to obj m
             clear m;
 
             if strcmp(mode,'movie')
 
-                %Because of how imrotate works, the size of img is not guaranteed!  
+                %Because of how imrotate works, the size of img (the agent) is not guaranteed!  
                 %(it adds buffer cells if needed to fit the whole img). But
                 %the midpoint is guaranteed to stay the midpoint!  So let's plot that
                 %instead.
-                % 
+                
                 x = x+50;
                 y = y+50;
 
                 %Draw one boring second of the triangle sitting in initial position!
                 withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
                 newimg = moveImg(img, withbridge, x(1)-50, y(1)-50); 
-                
 
                 for j=1:30
                     image(newimg);
