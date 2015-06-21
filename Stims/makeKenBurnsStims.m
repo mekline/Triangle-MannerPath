@@ -1,6 +1,9 @@
-function makeKenBurnsStims(manners, paths, mode)
+function makeKenBurnsStims(manners, paths, mode, watchit)
 %Just like makeMPStims, but the whole movie also moves on a white
 %background.  Also adds and option to have multiple agents!
+%
+%The new watchit option lets you decide to watch the movie as it compiles,
+%which is SUPER SLOW
 %
 %Full set of paths & manners:
 %{'vibrate','rotate','halfrotate','rock','sine','bounce','loop','stopstart','squarewave','backforth','zip','wheelie'}
@@ -8,6 +11,11 @@ function makeKenBurnsStims(manners, paths, mode)
 %
 %modes: 'pilot' just shows traces quickly, 'movie' exports videos to
 %movies folder
+
+if nargin < 4
+    watchit = 0;
+end
+
 
 currentFolder = pwd;
 
@@ -44,6 +52,7 @@ for a=1:length(manners)
 
             %Now use the above calculated path to draw them to obj m
             clear m;
+            clear m_images;
 
             if strcmp(mode,'movie')
 
@@ -65,11 +74,15 @@ for a=1:length(manners)
                 for j=1:prefix
                     %NEW FOR KB - Plot newimg onto the bigger background,
                     %in the right spot.
-                    image(newimg);
-                    axis off;
-                    m(j) = getframe;
-                    drawnow;
+                    if watchit
+                        image(newimg);
+                    end
+                    %axis off;
+                    %m(j) = getframe;
+                    %drawnow;
+                    m_images(:,:,:,j) = newimg;
                 end
+                
 
                 %Draw the animation
                 for i = 1:lens
@@ -89,28 +102,41 @@ for a=1:length(manners)
                     
                     %NEW FOR KB - Plot newimg onto the bigger background,
                     %in the right spot.    
-                    m(i+prefix) = getframe;
-                    image(newimg);
-                    axis off;
-                    drawnow;
+                    %m(i+prefix) = getframe;
+                    if watchit
+                        image(newimg);
+                    end
+                    %axis off;
+                    %drawnow;
+                    m_images(:,:,:,i) = newimg;
                 end
 
                 %Draw boring final position
                 for k = 1:postfix
                     %NEW FOR KB - Plot newimg onto the bigger background,
                     %in the right spot.
-                    m(k+lens+prefix) = getframe;
-                    image(newimg);
-                    axis off;
-                    drawnow;
+                    %m(k+lens+prefix) = getframe;
+                    if watchit
+                        image(newimg);
+                    end
+                    %axis off;
+                    %drawnow;
+                    m_images(:,:,:,k) = newimg;
                 end
 
-                %Convert m to a movie :)
-                %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
-                w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
+%                 %Convert m to a movie :)
+%                 %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
+%                 w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
+%                 w.FrameRate = 30;
+%                 open(w);
+%                 writeVideo(w,m);
+%                 close(w);
+                
+                            
+                w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_2' mypath],'MPEG-4');
                 w.FrameRate = 30;
                 open(w);
-                writeVideo(w,m);
+                writeVideo(w,m_images);
                 close(w);
 
             elseif strcmp(mode,'pilot')
