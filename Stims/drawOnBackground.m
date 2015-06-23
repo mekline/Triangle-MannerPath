@@ -16,9 +16,8 @@ newImg = backimg;
 for i=1:q
     for j=1:r
         pix = img(i, j, :); %Get that pixel in the img
-        %check if it's the stupid green (we'll allow for variance!)
-        refcolor = [0 255 0];
-        isBG = sum(abs(int16(squeeze(pix))-int16(refcolor)'));
+        %check if it's the  BLACK (we'll allow for variance!)
+        isBG = sum(pix);
         %isBG = 150;
 
         if isBG > tolerance
@@ -29,4 +28,9 @@ for i=1:q
 end
 
 
+end
+
+function isAbove = thresh(mypix)
+    
+    isAbove = 0;
 end

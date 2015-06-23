@@ -38,18 +38,18 @@ for s=1:segs
     endpos = where(s + 1,:);
     
     
-    %make points along the path! Denominator means there will be 30 frames
+    %make points along the path! Denominator means there will be 30 (lenpaths) frames
     %Have to deal with a special case: vertical or horizontal movement will
     %break the below!
     if (startpos(1) == endpos(1))
-        x_i = ones(30,1)*startpos(1);
+        x_i = ones(lenpath,1)*startpos(1);
     else
-        x_i = startpos(1):(endpos(1)-startpos(1))/(29):endpos(1);
+        x_i = startpos(1):(endpos(1)-startpos(1))/(lenpath-1):endpos(1);
     end
     if(startpos(2) == endpos(2))
-        y_i = ones(30,1)*startpos(2);
+        y_i = ones(lenpath,1)*startpos(2);
     else
-        y_i = startpos(2):(endpos(2)-startpos(2))/(29):endpos(2);
+        y_i = startpos(2):(endpos(2)-startpos(2))/(lenpath-1):endpos(2);
     end
     
     %make sure x and y are oriented the right way!
