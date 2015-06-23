@@ -83,15 +83,13 @@ for a=1:length(manners)
                 y = y+50;
 
                 %Draw one boring second of the triangle sitting in initial position!
-                withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
+                withbridge = moveImg(bridgeimg, backimg, 195, 295);
                 newimg = moveImg(img, withbridge, x(1)-50, y(1)-50); 
                 
                 prefix = floor((180-lens)/3); %Standardized so that total movie comes out to 180frames
                 postfix = floor(2*(180-lens)/3);
                 
                 for j=1:prefix
-                    %NEW FOR KB - Plot newimg onto the bigger background,
-                    %in the right spot.
                     if watchit
                         image(newimg);
                     end
@@ -109,14 +107,12 @@ for a=1:length(manners)
                     %draw triangle & bridge on background, in the correct order!
                     if bridgeFront(i)
                         nobridge = moveImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
-                        newimg = drawOnBackground(bridgeimg, nobridge, 195, 295);
+                        newimg = moveImg(bridgeimg, nobridge, 195, 295);
                     else
-                        withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
+                        withbridge = moveImg(bridgeimg, backimg, 195, 295);
                         newimg = moveImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
                         end
-                    
-                    %NEW FOR KB - Plot newimg onto the bigger background,
-                    %in the right spot.    
+   
                     if watchit
                         image(newimg);
                     end
@@ -125,13 +121,20 @@ for a=1:length(manners)
 
                 %Draw boring final position
                 for k = 1:postfix
-                    %NEW FOR KB - Plot newimg onto the bigger background,
-                    %in the right spot.
                     if watchit
                         image(newimg);
                     end
                     m_images(:,:,:,prefix+lens+k) = newimg;
                 end
+                
+                %KEN BURNS TIME!
+                %Calculate a (random) path for the movie to move around on
+                %the larger background, then plot everything into the
+                %bigger matrix.
+                
+                %kb_back = zeros(900, 1200, 3, 180); %height, width, colors, length-in-frames
+                %kb_path = getKBpath(box_x, box_y, 180); %this returns a random bounce-around in the box 
+
                 
                 %Report what movie that was
                 
@@ -151,7 +154,7 @@ for a=1:length(manners)
 
                 %And here's something else for debugging - instead of redrawing the
                 %triangle, trace its path 
-                newimg = drawOnBackground(bridgeimg,backimg,195, 275);
+                newimg = moveImg(bridgeimg,backimg,195, 275);
                 for i = 1:lens
                     newimg = traceImg(img, newimg, x(i),y(i));
                 end
@@ -164,3 +167,6 @@ for a=1:length(manners)
         end %End THIS MOVIE
     end
 end
+
+load gong.mat;
+sound(y);

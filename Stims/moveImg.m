@@ -1,6 +1,6 @@
 function new_img = moveImg(img, backimg, x,y)
 
-%This redraws img on the bkg image, making sure nothing falls off the 
+%This redraws img on the bkg image at point x,y in the backimg, making sure nothing falls off the 
 %color spectrum or edge of the image!
 
 img = uint8(img);
