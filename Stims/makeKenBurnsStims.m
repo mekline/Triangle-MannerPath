@@ -135,8 +135,8 @@ for a=1:length(manners)
                 %how long is the movie? Check here in case of mistakes :p 
                 final_len = size(m_images,4);
                 
-                kb_back = zeros(900, 1200, 3, final_len); %height, width, colors, length-in-frames
-                [kb_x, kb_y] = getKBPath(300, 400, final_len); %this returns a random bounce-around in the box (diff between small & big frames)
+                kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
+                [kb_x, kb_y] = getKBPath(150, 200, final_len); %this returns a random bounce-around in the box (diff between small & big frames)
                 
                 %Now plot my movie into the bigger (all black) movie!
                 
@@ -144,10 +144,10 @@ for a=1:length(manners)
                 
                 for i = 1:final_len
                     %draw movie on background! 
-                    movToDraw = m_images(:,:,:,1);
+                    movToDraw = m_images(:,:,:,i);
                     [t, u, v] = size(movToDraw);
                     
-                    newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i) - round(t/2),kb_y(i)-round(u/2));
+                    newimg = traceImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
                     final_images(:,:,:,i) = newimg;
                 end
                 
@@ -156,7 +156,7 @@ for a=1:length(manners)
                 
                 %Report what movie that was
                 
-                deets = [manners{a},' ',paths{b},' ', num2str(obj)];
+                deets = [num2str(obj), ' ', manners{a},' ',paths{b}];
                 disp(deets)
    
 

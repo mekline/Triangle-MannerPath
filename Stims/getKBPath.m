@@ -23,9 +23,9 @@ points = [box_x box_y;
 %How many paths to go on?
 segs = floor(lens/30);
 
-%Where to go? Samples without replacement, so don't have more than 8 segs!
+%Where to go? Samples without replacement, so don't have more than 8!
 
-where = datasample(points, segs+1 , 'Replace',false);
+where = datasample(points, segs+2 , 'Replace',false);
 
 x = [];
 y = [];
@@ -33,9 +33,10 @@ y = [];
 %Make the paths!
 for s=1:segs
     
-    %choose the segment
+    %choose the next segment
     startpos = where(s,:);
     endpos = where(s + 1,:);
+    
     
     %make points along the path! Denominator means there will be 30 frames
     %Have to deal with a special case: vertical or horizontal movement will
@@ -46,7 +47,7 @@ for s=1:segs
         x_i = startpos(1):(endpos(1)-startpos(1))/(29):endpos(1);
     end
     if(startpos(2) == endpos(2))
-        y_i = ones(30,1)*startpos(1);
+        y_i = ones(30,1)*startpos(2);
     else
         y_i = startpos(2):(endpos(2)-startpos(2))/(29):endpos(2);
     end
@@ -62,6 +63,9 @@ for s=1:segs
     %append
     x = [x; x_i];
     y = [y; y_i];
+    
+
+    end
 
 end
 
