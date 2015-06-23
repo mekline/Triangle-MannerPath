@@ -35,17 +35,9 @@ switch pathname
     % Control (still!) paths in different locations
     %
     
-    case 'control1' %In starting position
+    case 'control1'
         lens = 120;
-        x = ones(lens,1)*points(1,1);
-        y = ones(lens,1)*points(1,2);
-        bridgeFront = zeros(lens, 1);
-        
-    case 'control2' %In 'underfar' final pos
-        lens = 120;
-        x = ones(lens,1)*points(13,1);
-        y = ones(lens,1)*points(13,2);
-        bridgeFront = zeros(lens, 1);
+        x = ones(lens,1)*
         
         
     %

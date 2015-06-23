@@ -26,14 +26,25 @@ for a=1:length(manners)
         mymanner = manners{a};
         mypath = paths{b};
         [x, y, lens, bridgeFront] = getPath(mypath); %x and y are the top lh corner of the object
+        
+        
         %lens is number of (motion) frames, 30 = 1 sec
         %bridge front tells whether to draw the bridge in front of the
         %triangle at this timpoint.
         
-        [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
+        %for debugging
+        %testlen = ['my lens is ', num2str(lens), 'but my x and y lens are', num2str(length(x)), ' ', num2str(length(y))];
+        %disp(testlen)
+        
+        %Ensure that points are equidistant along that piecewise path...
+        if (not (all(x == x(1)))) && (not (all(y == y(1))))
+            [x, y] = smoothPath(x,y); 
+        end
+        
+        
         [x, y, rotations] = applyManner(mymanner, x, y);
 
-        %special case! lens may have gotten longer, watch out:
+        %special case! lens may have gotten longer or shorter during smoothing, watch out:
         if (lens < length(x))
             bridgeFront = [bridgeFront; repmat(bridgeFront(end),length(x)-lens, 1)]; 
             lens = length(x);
@@ -57,7 +68,8 @@ for a=1:length(manners)
             %Now use the above calculated path to draw them to obj m_images
             clear m_images;
             
-            %How big is my array going to be?  Preallocate it!
+            %How big is my array going to be?  Preallocate it? This doesn't
+            %actually seem to improve speed
             %m_images = ones(600, 800, 3, 180); %height, width, colors, length-in-frames
 
             if strcmp(mode,'movie')
