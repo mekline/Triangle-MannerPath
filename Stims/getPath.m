@@ -12,8 +12,9 @@ points = [300 50;
     250 450;
     300 600;
     150 550;
-    325 300;
-    450 600];
+    300 300;
+    450 600;
+    450 400];
 
 switch pathname
     case 'basicOnto'
@@ -47,6 +48,17 @@ switch pathname
         y = ones(lens,1)*points(13,2);
         bridgeFront = zeros(lens, 1);
         
+    case 'control3' %In 'past' final pos
+        lens = 120;
+        x = ones(lens,1)*points(5,1);
+        y = ones(lens,1)*points(5,2);
+        bridgeFront = zeros(lens, 1);
+        
+    case 'control4' %In new final pos
+        lens = 120;
+        x = ones(lens,1)*points(14,1);
+        y = ones(lens,1)*points(14,2);
+        bridgeFront = zeros(lens, 1);
         
     %
     %(OK, here's the real ones!)
