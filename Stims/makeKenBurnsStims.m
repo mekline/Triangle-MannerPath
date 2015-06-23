@@ -147,7 +147,7 @@ for a=1:length(manners)
                     movToDraw = m_images(:,:,:,i);
                     [t, u, v] = size(movToDraw);
                     
-                    newimg = traceImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
+                    newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
                     final_images(:,:,:,i) = newimg;
                 end
                 
