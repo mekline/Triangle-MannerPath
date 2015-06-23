@@ -1,4 +1,4 @@
-function makeKenBurnsStims(manners, paths, mode, watchit)
+function makeKenBurnsStims(manners, paths, objects, mode, watchit)
 %Just like makeMPStims, but the whole movie also moves on a white
 %background.  Also adds and option to have multiple agents!
 %
@@ -12,7 +12,7 @@ function makeKenBurnsStims(manners, paths, mode, watchit)
 %modes: 'pilot' just shows traces quickly, 'movie' exports videos to
 %movies folder
 
-if nargin < 4
+if nargin < 5
     watchit = 0;
 end
 
@@ -57,7 +57,9 @@ for a=1:length(manners)
         y = y+25;
         
         %Get the imgs and make a movie!    
-        for obj = 6:6
+        for c= 1:length(objects)
+            
+            obj = objects{c};
             
             %Report what movie this will be
             deets = [num2str(obj), ' ', manners{a},' ',paths{b}];
