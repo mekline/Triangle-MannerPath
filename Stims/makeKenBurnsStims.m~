@@ -2,7 +2,8 @@ function makeKenBurnsStims(manners, paths, mode, watchit)
 %Just like makeMPStims, but the whole movie also moves on a white
 %background.  Also adds and option to have multiple agents!
 %
-%The new watchit option 
+%The new watchit option lets you decide to watch the movie as it compiles,
+%which is SUPER SLOW
 %
 %Full set of paths & manners:
 %{'vibrate','rotate','halfrotate','rock','sine','bounce','loop','stopstart','squarewave','backforth','zip','wheelie'}
@@ -10,6 +11,11 @@ function makeKenBurnsStims(manners, paths, mode, watchit)
 %
 %modes: 'pilot' just shows traces quickly, 'movie' exports videos to
 %movies folder
+
+if nargin < 4
+    watchit = 0;
+end
+
 
 currentFolder = pwd;
 
@@ -21,7 +27,8 @@ for a=1:length(manners)
         mypath = paths{b};
         [x, y, lens, bridgeFront] = getPath(mypath); %x and y are the top lh corner of the object
         %lens is number of (motion) frames, 30 = 1 sec
-        %bridge front tells whether to draw the bridge in front of the triangle.
+        %bridge front tells whether to draw the bridge in front of the
+        %triangle at this timpoint.
         
         [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
         [x, y, rotations] = applyManner(mymanner, x, y);
@@ -36,6 +43,9 @@ for a=1:length(manners)
         
         %Get the imgs and make a movie!    
         for obj = 1:1
+            
+            tic; %how long does this take?
+            
             img = imread([currentFolder '/img/' num2str(obj) 'eye.jpg'],'JPEG'); %read in object
             [m n p] = size(img); %how big is it? (h, w, layers)
 
@@ -44,9 +54,11 @@ for a=1:length(manners)
 
             bridgeimg = imread([currentFolder '/img/bridge.jpg'],'JPEG'); %read in bg
 
-            %Now use the above calculated path to draw them to obj m
-            clear m;
+            %Now use the above calculated path to draw them to obj m_images
             clear m_images;
+            
+            %How big is my array going to be?  Preallocate it!
+            %m_images = ones(600, 800, 3, 180); %height, width, colors, length-in-frames
 
             if strcmp(mode,'movie')
 
@@ -68,48 +80,55 @@ for a=1:length(manners)
                 for j=1:prefix
                     %NEW FOR KB - Plot newimg onto the bigger background,
                     %in the right spot.
-                    image(newimg);
-                    %axis off;
-                    %m(j) = getframe;
-                    %drawnow;
+                    if watchit
+                        image(newimg);
+                    end
                     m_images(:,:,:,j) = newimg;
                 end
                 
-                size(m_images)
 
-%                 %Draw the animation
-%                 for i = 1:lens
-%                     %rotate the triangle
-%                     img_rot = imrotate(img, rotations(i)); 
-%                     %how big is the img right now? Find this out so we can set the lh
-%                     %corner correctly!
-%                     [t u v] = size(img_rot);
-%                     %draw triangle & bridge on background, in the correct order!
-%                     if bridgeFront(i)
-%                         nobridge = moveImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
-%                         newimg = drawOnBackground(bridgeimg, nobridge, 195, 295);
-%                     else
-%                         withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
-%                         newimg = moveImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
-%                         end
-%                     
-%                     %NEW FOR KB - Plot newimg onto the bigger background,
-%                     %in the right spot.    
-%                     m(i+prefix) = getframe;
-%                     image(newimg);
-%                     axis off;
-%                     drawnow;
-%                 end
-% 
-%                 %Draw boring final position
-%                 for k = 1:postfix
-%                     %NEW FOR KB - Plot newimg onto the bigger background,
-%                     %in the right spot.
-%                     m(k+lens+prefix) = getframe;
-%                     image(newimg);
-%                     axis off;
-%                     drawnow;
-%                 end
+                %Draw the animation
+                for i = 1:lens
+                    %rotate the triangle
+                    img_rot = imrotate(img, rotations(i)); 
+                    %how big is the img right now? Find this out so we can set the lh
+                    %corner correctly!
+                    [t u v] = size(img_rot);
+                    %draw triangle & bridge on background, in the correct order!
+                    if bridgeFront(i)
+                        nobridge = moveImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
+                        newimg = drawOnBackground(bridgeimg, nobridge, 195, 295);
+                    else
+                        withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
+                        newimg = moveImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
+                        end
+                    
+                    %NEW FOR KB - Plot newimg onto the bigger background,
+                    %in the right spot.    
+                    %m(i+prefix) = getframe;
+                    if watchit
+                        image(newimg);
+                    end
+                    %axis off;
+                    %drawnow;
+                    m_images(:,:,:,prefix+i) = newimg;
+                end
+
+                %Draw boring final position
+                for k = 1:postfix
+                    %NEW FOR KB - Plot newimg onto the bigger background,
+                    %in the right spot.
+                    %m(k+lens+prefix) = getframe;
+                    if watchit
+                        image(newimg);
+                    end
+                    %axis off;
+                    %drawnow;
+                    m_images(:,:,:,prefix+lens+k) = newimg;
+                end
+                
+                size(m_images)
+                [manners{a}; paths{b}; obj]
 
 %                 %Convert m to a movie :)
 %                 %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
@@ -125,6 +144,7 @@ for a=1:length(manners)
                 open(w);
                 writeVideo(w,m_images);
                 close(w);
+               
 
             elseif strcmp(mode,'pilot')
 
@@ -138,6 +158,7 @@ for a=1:length(manners)
                 axis off;
                 drawnow;
             end
-        end
+            toc
+        end %End THIS MOVIE
     end
 end

@@ -27,7 +27,8 @@ for a=1:length(manners)
         mypath = paths{b};
         [x, y, lens, bridgeFront] = getPath(mypath); %x and y are the top lh corner of the object
         %lens is number of (motion) frames, 30 = 1 sec
-        %bridge front tells whether to draw the bridge in front of the triangle.
+        %bridge front tells whether to draw the bridge in front of the
+        %triangle at this timpoint.
         
         [x, y] = smoothPath(x,y); %Ensures that points are equidistant along that piecewise path...
         [x, y, rotations] = applyManner(mymanner, x, y);
@@ -43,7 +44,8 @@ for a=1:length(manners)
         %Get the imgs and make a movie!    
         for obj = 1:1
             
-            tic;
+            tic; %how long does this take?
+            
             img = imread([currentFolder '/img/' num2str(obj) 'eye.jpg'],'JPEG'); %read in object
             [m n p] = size(img); %how big is it? (h, w, layers)
 
@@ -52,8 +54,7 @@ for a=1:length(manners)
 
             bridgeimg = imread([currentFolder '/img/bridge.jpg'],'JPEG'); %read in bg
 
-            %Now use the above calculated path to draw them to obj m
-            clear m;
+            %Now use the above calculated path to draw them to obj m_images
             clear m_images;
             
             %How big is my array going to be?  Preallocate it!
@@ -82,9 +83,6 @@ for a=1:length(manners)
                     if watchit
                         image(newimg);
                     end
-                    %axis off;
-                    %m(j) = getframe;
-                    %drawnow;
                     m_images(:,:,:,j) = newimg;
                 end
                 
@@ -107,12 +105,9 @@ for a=1:length(manners)
                     
                     %NEW FOR KB - Plot newimg onto the bigger background,
                     %in the right spot.    
-                    %m(i+prefix) = getframe;
                     if watchit
                         image(newimg);
                     end
-                    %axis off;
-                    %drawnow;
                     m_images(:,:,:,prefix+i) = newimg;
                 end
 
@@ -120,27 +115,20 @@ for a=1:length(manners)
                 for k = 1:postfix
                     %NEW FOR KB - Plot newimg onto the bigger background,
                     %in the right spot.
-                    %m(k+lens+prefix) = getframe;
                     if watchit
                         image(newimg);
                     end
-                    %axis off;
-                    %drawnow;
                     m_images(:,:,:,prefix+lens+k) = newimg;
                 end
                 
-                size(m_images)
-
-%                 %Convert m to a movie :)
-%                 %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
-%                 w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
-%                 w.FrameRate = 30;
-%                 open(w);
-%                 writeVideo(w,m);
-%                 close(w);
+                %Report what movie that was
                 
-                            
-                w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_2' mypath],'MPEG-4');
+                deets = [manners{a},' ',paths{b},' ', num2str(obj)];
+                disp(deets)
+   
+
+                %Convert m_images to a movie!           
+                w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
                 w.FrameRate = 30;
                 open(w);
                 writeVideo(w,m_images);
@@ -159,7 +147,8 @@ for a=1:length(manners)
                 axis off;
                 drawnow;
             end
-            toc
-        end
+            
+            toc %how long did this movie take?
+        end %End THIS MOVIE
     end
 end
