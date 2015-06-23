@@ -1,16 +1,16 @@
 function [x, y, lens, bridgeFront] = getPath(pathname)
 
 %Important points in the image (start, 'above', etc.); coded by top lh corner
-points = [325 50; %the 'baseline' is budged down just a bit so agents don't float in the air
-    325 200; 
-    325 250; 
-    325 450;
-    325 650; 
-    325 700; 
+points = [300 50; 
+    300 200; 
+    300 250; 
+    300 450;
+    300 650; 
+    300 700; 
     50 450; 
     100 450; 
     250 450;
-    325 600;
+    300 600;
     150 550;
     325 300;
     450 600];

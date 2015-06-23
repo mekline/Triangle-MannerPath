@@ -52,8 +52,16 @@ for a=1:length(manners)
             lens=length(x);
         end
         
+        %special case! Budge all the paths down a hair so that agents don't
+        %float in the air.
+        y = y+25;
+        
         %Get the imgs and make a movie!    
-        for obj = 3:3
+        for obj = 7:7
+            
+            %Report what movie this will be
+            deets = [num2str(obj), ' ', manners{a},' ',paths{b}];
+            disp(deets)
             
             tic; %how long does this take?
             
@@ -99,6 +107,7 @@ for a=1:length(manners)
 
                 %Draw the animation
                 for i = 1:lens
+                    i
                     %rotate the triangle
                     img_rot = imrotate(img, rotations(i)); 
                     %how big is the img right now? Find this out so we can set the lh
@@ -111,7 +120,7 @@ for a=1:length(manners)
                     else
                         withbridge = placeImg(bridgeimg, backimg, 195, 295);
                         newimg = placeImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
-                        end
+                    end
    
                     if watchit
                         image(newimg);
@@ -127,43 +136,39 @@ for a=1:length(manners)
                     m_images(:,:,:,prefix+lens+k) = newimg;
                 end
                 
-                %KEN BURNS TIME!
-                %Calculate a (random) path for the movie to move around on
-                %the larger background, then plot everything into the
-                %bigger matrix.
+%                 %KEN BURNS TIME!
+%                 %Calculate a (random) path for the movie to move around on
+%                 %the larger background, then plot everything into the
+%                 %bigger matrix.
+%                 
+%                 %how long is the movie? Check here in case of mistakes :p 
+%                 final_len = size(m_images,4);
+%                 
+%                 kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
+%                 [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); 
+%                 %this returns a random bounce-around in the box (diff 
+%                 %between small & big frames)that takes the final # of
+%                 %frames to move 1 segment.
+%                 
+%                 %Now plot my movie into the bigger (all black) movie!
+%                 
+%                 clear final_images;
+%                 
+%                 for i = 1:final_len
+%                     %draw movie on background! 
+%                     movToDraw = m_images(:,:,:,i);
+%                     [t, u, v] = size(movToDraw);
+%                     
+%                     newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
+%                     final_images(:,:,:,i) = newimg;
+%                 end
                 
-                %how long is the movie? Check here in case of mistakes :p 
-                final_len = size(m_images,4);
-                
-                kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
-                [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); 
-                %this returns a random bounce-around in the box (diff 
-                %between small & big frames)that takes the final # of
-                %frames to move 1 segment.
-                
-                %Now plot my movie into the bigger (all black) movie!
-                
-                clear final_images;
-                
-                for i = 1:final_len
-                    %draw movie on background! 
-                    movToDraw = m_images(:,:,:,i);
-                    [t, u, v] = size(movToDraw);
-                    
-                    newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
-                    final_images(:,:,:,i) = newimg;
-                end
-                
-                
+                final_images = m_images;
 
                 
-                %Report what movie that was
-                
-                deets = [num2str(obj), ' ', manners{a},' ',paths{b}];
-                disp(deets)
    
 
-                %Convert m_images to a movie!           
+                %Convert images to a movie!           
                 w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
                 w.FrameRate = 30;
                 open(w);
