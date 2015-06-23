@@ -53,7 +53,7 @@ for a=1:length(manners)
         end
         
         %Get the imgs and make a movie!    
-        for obj = 1:1
+        for obj = 3:3
             
             tic; %how long does this take?
             
@@ -136,7 +136,10 @@ for a=1:length(manners)
                 final_len = size(m_images,4);
                 
                 kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
-                [kb_x, kb_y] = getKBPath(150, 200, final_len); %this returns a random bounce-around in the box (diff between small & big frames)
+                [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); 
+                %this returns a random bounce-around in the box (diff 
+                %between small & big frames)that takes the final # of
+                %frames to move 1 segment.
                 
                 %Now plot my movie into the bigger (all black) movie!
                 

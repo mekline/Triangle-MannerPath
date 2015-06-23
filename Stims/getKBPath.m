@@ -1,4 +1,4 @@
-function [x, y] = getKBPath(box_x, box_y, lens)
+function [x, y] = getKBPath(box_x, box_y, lens, lenpath)
 
 %Based on getPath! This takes in a box size and length of time, and
 %generates a random bounce-around.  If you give it a multiple of 30 frames
@@ -21,7 +21,7 @@ points = [box_x box_y;
     floor(box_x/2) box_y];
  
 %How many paths to go on?
-segs = floor(lens/30);
+segs = floor(lens/lenpath);
 
 %Where to go? Samples without replacement, so don't have more than 8!
 
