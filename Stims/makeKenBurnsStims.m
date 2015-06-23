@@ -83,8 +83,8 @@ for a=1:length(manners)
                 y = y+50;
 
                 %Draw one boring second of the triangle sitting in initial position!
-                withbridge = moveImg(bridgeimg, backimg, 195, 295);
-                newimg = moveImg(img, withbridge, x(1)-50, y(1)-50); 
+                withbridge = placeImg(bridgeimg, backimg, 195, 295);
+                newimg = placeImg(img, withbridge, x(1)-50, y(1)-50); 
                 
                 prefix = floor((180-lens)/3); %Standardized so that total movie comes out to 180frames
                 postfix = floor(2*(180-lens)/3);
@@ -106,11 +106,11 @@ for a=1:length(manners)
                     [t u v] = size(img_rot);
                     %draw triangle & bridge on background, in the correct order!
                     if bridgeFront(i)
-                        nobridge = moveImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
-                        newimg = moveImg(bridgeimg, nobridge, 195, 295);
+                        nobridge = placeImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
+                        newimg = placeImg(bridgeimg, nobridge, 195, 295);
                     else
-                        withbridge = moveImg(bridgeimg, backimg, 195, 295);
-                        newimg = moveImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
+                        withbridge = placeImg(bridgeimg, backimg, 195, 295);
+                        newimg = placeImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
                         end
    
                     if watchit
@@ -154,7 +154,7 @@ for a=1:length(manners)
 
                 %And here's something else for debugging - instead of redrawing the
                 %triangle, trace its path 
-                newimg = moveImg(bridgeimg,backimg,195, 275);
+                newimg = placeImg(bridgeimg,backimg,195, 275);
                 for i = 1:lens
                     newimg = traceImg(img, newimg, x(i),y(i));
                 end
