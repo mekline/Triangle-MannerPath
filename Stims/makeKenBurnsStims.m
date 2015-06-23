@@ -132,8 +132,8 @@ for a=1:length(manners)
                 %the larger background, then plot everything into the
                 %bigger matrix.
                 
-                %kb_back = zeros(900, 1200, 3, 180); %height, width, colors, length-in-frames
-                %kb_path = getKBpath(box_x, box_y, 180); %this returns a random bounce-around in the box 
+                kb_back = zeros(900, 1200, 3, 180); %height, width, colors, length-in-frames
+                [kb_x, kb_y] = getKBpath(box_x, box_y, 180); %this returns a random bounce-around in the box 
 
                 
                 %Report what movie that was

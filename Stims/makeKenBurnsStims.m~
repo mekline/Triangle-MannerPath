@@ -26,23 +26,25 @@ for a=1:length(manners)
         mymanner = manners{a};
         mypath = paths{b};
         [x, y, lens, bridgeFront] = getPath(mypath); %x and y are the top lh corner of the object
-        x
-        y
-        testlen = ['my lens is ', num2str(lens), 'but my x and y lens are', num2str(length(x)), ' ', num2str(length(y))];
-        disp(testlen)
+        
+        
         %lens is number of (motion) frames, 30 = 1 sec
         %bridge front tells whether to draw the bridge in front of the
         %triangle at this timpoint.
         
+        %for debugging
+        %testlen = ['my lens is ', num2str(lens), 'but my x and y lens are', num2str(length(x)), ' ', num2str(length(y))];
+        %disp(testlen)
+        
         %Ensure that points are equidistant along that piecewise path...
-        if ((not (all(x == x(1))) && (not(all(y == y(1))))
+        if (not (all(x == x(1)))) && (not (all(y == y(1))))
             [x, y] = smoothPath(x,y); 
         end
         
         
         [x, y, rotations] = applyManner(mymanner, x, y);
 
-        %special case! lens may have gotten longer, watch out:
+        %special case! lens may have gotten longer or shorter during smoothing, watch out:
         if (lens < length(x))
             bridgeFront = [bridgeFront; repmat(bridgeFront(end),length(x)-lens, 1)]; 
             lens = length(x);
@@ -66,7 +68,8 @@ for a=1:length(manners)
             %Now use the above calculated path to draw them to obj m_images
             clear m_images;
             
-            %How big is my array going to be?  Preallocate it!
+            %How big is my array going to be?  Preallocate it? This doesn't
+            %actually seem to improve speed
             %m_images = ones(600, 800, 3, 180); %height, width, colors, length-in-frames
 
             if strcmp(mode,'movie')
@@ -80,15 +83,13 @@ for a=1:length(manners)
                 y = y+50;
 
                 %Draw one boring second of the triangle sitting in initial position!
-                withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
-                newimg = moveImg(img, withbridge, x(1)-50, y(1)-50); 
+                withbridge = placeImg(bridgeimg, backimg, 195, 295);
+                newimg = placeImg(img, withbridge, x(1)-50, y(1)-50); 
                 
                 prefix = floor((180-lens)/3); %Standardized so that total movie comes out to 180frames
                 postfix = floor(2*(180-lens)/3);
                 
                 for j=1:prefix
-                    %NEW FOR KB - Plot newimg onto the bigger background,
-                    %in the right spot.
                     if watchit
                         image(newimg);
                     end
@@ -105,15 +106,13 @@ for a=1:length(manners)
                     [t u v] = size(img_rot);
                     %draw triangle & bridge on background, in the correct order!
                     if bridgeFront(i)
-                        nobridge = moveImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
-                        newimg = drawOnBackground(bridgeimg, nobridge, 195, 295);
+                        nobridge = placeImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
+                        newimg = placeImg(bridgeimg, nobridge, 195, 295);
                     else
-                        withbridge = drawOnBackground(bridgeimg, backimg, 195, 295);
-                        newimg = moveImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
+                        withbridge = placeImg(bridgeimg, backimg, 195, 295);
+                        newimg = placeImg(img_rot, withbridge, x(i) - round(t/2),y(i)-round(u/2));
                         end
-                    
-                    %NEW FOR KB - Plot newimg onto the bigger background,
-                    %in the right spot.    
+   
                     if watchit
                         image(newimg);
                     end
@@ -122,13 +121,20 @@ for a=1:length(manners)
 
                 %Draw boring final position
                 for k = 1:postfix
-                    %NEW FOR KB - Plot newimg onto the bigger background,
-                    %in the right spot.
                     if watchit
                         image(newimg);
                     end
                     m_images(:,:,:,prefix+lens+k) = newimg;
                 end
+                
+                %KEN BURNS TIME!
+                %Calculate a (random) path for the movie to move around on
+                %the larger background, then plot everything into the
+                %bigger matrix.
+                
+                kb_back = zeros(900, 1200, 3, 180); %height, width, colors, length-in-frames
+                kb_path = getKBpath(box_x, box_y, 180); %this returns a random bounce-around in the box 
+
                 
                 %Report what movie that was
                 
@@ -148,7 +154,7 @@ for a=1:length(manners)
 
                 %And here's something else for debugging - instead of redrawing the
                 %triangle, trace its path 
-                newimg = drawOnBackground(bridgeimg,backimg,195, 275);
+                newimg = placeImg(bridgeimg,backimg,195, 275);
                 for i = 1:lens
                     newimg = traceImg(img, newimg, x(i),y(i));
                 end
@@ -161,3 +167,6 @@ for a=1:length(manners)
         end %End THIS MOVIE
     end
 end
+
+load gong.mat;
+sound(y);
