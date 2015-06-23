@@ -42,6 +42,8 @@ for a=1:length(manners)
         
         %Get the imgs and make a movie!    
         for obj = 1:1
+            
+            tic;
             img = imread([currentFolder '/img/' num2str(obj) 'eye.jpg'],'JPEG'); %read in object
             [m n p] = size(img); %how big is it? (h, w, layers)
 
@@ -53,6 +55,9 @@ for a=1:length(manners)
             %Now use the above calculated path to draw them to obj m
             clear m;
             clear m_images;
+            
+            %How big is my array going to be?  Preallocate it!
+            %m_images = ones(600, 800, 3, 180); %height, width, colors, length-in-frames
 
             if strcmp(mode,'movie')
 
@@ -108,7 +113,7 @@ for a=1:length(manners)
                     end
                     %axis off;
                     %drawnow;
-                    m_images(:,:,:,i) = newimg;
+                    m_images(:,:,:,prefix+i) = newimg;
                 end
 
                 %Draw boring final position
@@ -121,8 +126,10 @@ for a=1:length(manners)
                     end
                     %axis off;
                     %drawnow;
-                    m_images(:,:,:,k) = newimg;
+                    m_images(:,:,:,prefix+lens+k) = newimg;
                 end
+                
+                size(m_images)
 
 %                 %Convert m to a movie :)
 %                 %movie2avi(m,[num2str(obj) '.avi'],'FPS',30);
@@ -138,6 +145,7 @@ for a=1:length(manners)
                 open(w);
                 writeVideo(w,m_images);
                 close(w);
+               
 
             elseif strcmp(mode,'pilot')
 
@@ -151,6 +159,7 @@ for a=1:length(manners)
                 axis off;
                 drawnow;
             end
+            toc
         end
     end
 end
