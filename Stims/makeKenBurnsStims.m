@@ -103,7 +103,7 @@ for a=1:length(manners)
                     img_rot = imrotate(img, rotations(i)); 
                     %how big is the img right now? Find this out so we can set the lh
                     %corner correctly!
-                    [t u v] = size(img_rot);
+                    [t, u, v] = size(img_rot);
                     %draw triangle & bridge on background, in the correct order!
                     if bridgeFront(i)
                         nobridge = placeImg(img_rot, backimg, x(i) - round(t/2),y(i)-round(u/2));
@@ -132,8 +132,26 @@ for a=1:length(manners)
                 %the larger background, then plot everything into the
                 %bigger matrix.
                 
-                kb_back = zeros(900, 1200, 3, 180); %height, width, colors, length-in-frames
-                [kb_x, kb_y] = getKBpath(box_x, box_y, 180); %this returns a random bounce-around in the box 
+                %how long is the movie? Check here in case of mistakes :p 
+                final_len = size(m_images,4);
+                
+                kb_back = zeros(900, 1200, 3, final_len); %height, width, colors, length-in-frames
+                [kb_x, kb_y] = getKBPath(300, 400, final_len); %this returns a random bounce-around in the box (diff between small & big frames)
+                
+                %Now plot my movie into the bigger (all black) movie!
+                
+                clear final_images;
+                
+                for i = 1:final_len
+                    %draw movie on background! 
+                    movToDraw = m_images(:,:,:,1);
+                    [t, u, v] = size(movToDraw);
+                    
+                    newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i) - round(t/2),kb_y(i)-round(u/2));
+                    final_images(:,:,:,i) = newimg;
+                end
+                
+                
 
                 
                 %Report what movie that was
@@ -146,7 +164,7 @@ for a=1:length(manners)
                 w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
                 w.FrameRate = 30;
                 open(w);
-                writeVideo(w,m_images);
+                writeVideo(w,final_images);
                 close(w);
                
 
@@ -168,5 +186,6 @@ for a=1:length(manners)
     end
 end
 
+%hooray, all movies exported successfully!
 load gong.mat;
 sound(y);

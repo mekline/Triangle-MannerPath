@@ -38,20 +38,30 @@ for s=1:segs
     endpos = where(s + 1,:);
     
     %make points along the path! Denominator means there will be 30 frames
-    x_i = startpos(1):(endpos(1)-startpos(1))/(29):endpos(1);
-    y_i = startpos(2):(endpos(2)-startpos(2))/(29):endpos(2);
+    %Have to deal with a special case: vertical or horizontal movement will
+    %break the below!
+    if (startpos(1) == endpos(1))
+        x_i = ones(30,1)*startpos(1);
+    else
+        x_i = startpos(1):(endpos(1)-startpos(1))/(29):endpos(1);
+    end
+    if(startpos(2) == endpos(2))
+        y_i = ones(30,1)*startpos(1);
+    else
+        y_i = startpos(2):(endpos(2)-startpos(2))/(29):endpos(2);
+    end
+    
+    %make sure x and y are oriented the right way!
+    if size(x_i,1) == 1
+        x_i = transpose(x_i);
+    end
+    if size(y_i,1) == 1
+        y_i = transpose(y_i);
+    end
     
     %append
-    x = [x x_i];
-    y = [y y_i];
+    x = [x; x_i];
+    y = [y; y_i];
 
 end
 
-
-%make sure x and y are oriented the right way!
-if size(x,1) == 1
-    x = transpose(x);
-end
-if size(y,1) == 1
-    y = transpose(y);
-end
