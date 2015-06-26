@@ -24,7 +24,7 @@ for a=1:1
             
             obj = objects{c};
             
-            loc = [300,400];
+            loc = [25,200];
             
             %Report what movie this will be
             deets = [num2str(obj), ' ', num2str(loc(1)), ' ',num2str(loc(2))];
