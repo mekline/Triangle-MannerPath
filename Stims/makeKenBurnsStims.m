@@ -1,9 +1,12 @@
-function makeKenBurnsStims(manners, paths, objects, mode, watchit)
-%Just like makeMPStims, but the whole movie also moves on a white
-%background.  Also adds and option to have multiple agents!
+function makeKenBurnsStims(manners, paths, objects, mode, doKenBurns, watchit)
+%Just like makeMPStims, but the whole movie also moves on a black
+%background.  Also adds an option to have multiple agents!
 %
 %The new watchit option lets you decide to watch the movie as it compiles,
-%which is SUPER SLOW
+%which is SUPER SLOW.  Don't do it unless you're developing that movie. 
+%
+%doKenBurns sets whether to place the movie on the moving black background,
+%it's much faster if you don't!!!!!
 %
 %Full set of paths & manners:
 %{'vibrate','rotate','halfrotate','rock','sine','bounce','loop','stopstart','squarewave','backforth','zip','wheelie'}
@@ -12,7 +15,7 @@ function makeKenBurnsStims(manners, paths, objects, mode, watchit)
 %modes: 'pilot' just shows traces quickly, 'movie' exports videos to
 %movies folder
 
-if nargin < 5
+if nargin < 6
     watchit = 0;
 end
 
@@ -142,36 +145,40 @@ for a=1:length(manners)
                 %the larger background, then plot everything into the
                 %bigger matrix.
                 
-                %how long is the movie? Check here in case of mistakes :p 
-                final_len = size(m_images,4);
+                if doKenBurns
                 
-                kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
-                [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); %30-fast 60-slow
+                    %how long is the movie? Check here in case of mistakes :p 
+                    final_len = size(m_images,4);
+
+                    kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
+                    [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); %30-fast 60-slow
+
+                    %this returns a random bounce-around in the box (diff 
+                    %between small & big frames)that takes the final # of
+                    %frames to move 1 segment.
+
+                    %Now plot my movie into the bigger (all black) movie!
+
+                    clear final_images;
+
+                    for i = 1:final_len
+                        %draw movie on background! 
+                        movToDraw = m_images(:,:,:,i);
+                        [t, u, v] = size(movToDraw);
+
+                        newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
+                        final_images(:,:,:,i) = newimg;
+                    end
+                else
                 
-                %this returns a random bounce-around in the box (diff 
-                %between small & big frames)that takes the final # of
-                %frames to move 1 segment.
-                
-                %Now plot my movie into the bigger (all black) movie!
-                
-                clear final_images;
-                
-                for i = 1:final_len
-                    %draw movie on background! 
-                    movToDraw = m_images(:,:,:,i);
-                    [t, u, v] = size(movToDraw);
-                    
-                    newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
-                    final_images(:,:,:,i) = newimg;
+                    final_images = m_images;
                 end
-                
-                %final_images = m_images;
 
                 
    
 
                 %Convert images to a movie!           
-                w = VideoWriter(['movies/' num2str(obj) '_' mymanner '_' mypath],'MPEG-4');
+                w = VideoWriter(['movies/' mymanner '_' mypath '_' num2str(obj)],'MPEG-4');
                 w.FrameRate = 30;
                 open(w);
                 writeVideo(w,final_images);
