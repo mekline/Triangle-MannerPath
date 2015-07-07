@@ -37,8 +37,7 @@ for a=1:length(manners)
             mypath = paths{b};
             [x, y, lens, bridgeFront] = getPath(mypath); %x and y are the top lh corner of the object
 
-            x(1);
-            y(1);
+
             %lens is number of (motion) frames, 30 = 1 sec
             %bridge front tells whether to draw the bridge in front of the
             %triangle at this timpoint.
@@ -115,8 +114,8 @@ for a=1:length(manners)
                 for i = 1:lens
                     
                     if i==1
-                        x(1);
-                        y(1);
+                        x(1)
+                        y(1)
                     end
                     %rotate the triangle
                     img_rot = imrotate(img, rotations(i)); 
