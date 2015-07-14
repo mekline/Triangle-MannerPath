@@ -1,4 +1,4 @@
-function makeKenBurnsStims(manners, paths, objects, mode, doKenBurns, watchit)
+function makeKenBurnsStims(manners, paths, objects, mode, doKenBurns, doMotionBar, watchit)
 %Just like makeMPStims, but the whole movie also (optionally) moves on a black
 %background.  Also adds an option to have multiple agents!
 %
@@ -20,6 +20,10 @@ if nargin < 5
 end
 
 if nargin < 6
+    doMotionBar = 0;
+end
+
+if nargin < 7
     watchit = 0;
 end
 
@@ -161,7 +165,7 @@ for a=1:length(manners)
                     final_len = size(m_images,4);
 
                     kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
-                    [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); %30-fast 60-slow
+                    [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); %30-fast motion 60-slow motion
 
                     %this returns a random bounce-around in the box (diff 
                     %between small & big frames)that takes the final # of
@@ -175,8 +179,37 @@ for a=1:length(manners)
                         %draw movie on background! 
                         movToDraw = m_images(:,:,:,i);
                         [t, u, v] = size(movToDraw);
-
                         newimg = placeImg(movToDraw, kb_back(:,:,:,i), kb_x(i),kb_y(i));
+                        
+                        %As another fun option, we can get a still bar in
+                        %front of the movie to provide some low-level
+                        %motion in even the control movies.  Put this somewhere carefully so that
+                        %it starts outside the movie box.
+                        if doMotionBar 
+                            startDrift = [kb_x(1), kb_y(1)];
+                            
+                            if isequal(startDrift, [0,0])||isequal(startDrift,[0,100])
+                                mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
+                                my_x = 500;%top lcorner of where to put the shape!
+                                my_y = 500;
+                            elseif isequal(startDrift, [150,200])||isequal(startDrift,[150,100])
+                                mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
+                                my_x = 500;%top lcorner of where to put the shape!
+                                my_y = 0;
+                            elseif isequal(startDrift, [150,0])||isequal(startDrift,[75,0])
+                                mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
+                                my_x = 0;%top lcorner of where to put the shape!
+                                my_y = 900;
+                            elseif isequal(startDrift, [75,200])||isequal(startDrift,[0,200])
+                                mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
+                                my_x = 500;%top lcorner of where to put the shape!
+                                my_y = 50;
+                            end
+                            
+                        end
+                        
+                        newimg = placeImg(mybar, newimg, my_x, my_y);
+                        
                         final_images(:,:,:,i) = newimg;
                     end
                 else
@@ -198,7 +231,7 @@ for a=1:length(manners)
             elseif strcmp(mode,'pilot')
 
                 %And here's something else for debugging - instead of redrawing the
-                %triangle, trace its path 
+                %triangle, trace its path. Good for making new paths!
                 newimg = placeImg(bridgeimg,backimg,195, 275);
                 for i = 1:lens
                     newimg = traceImg(img, newimg, x(i),y(i));
