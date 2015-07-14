@@ -15,6 +15,10 @@ function makeKenBurnsStims(manners, paths, objects, mode, doKenBurns, watchit)
 %modes: 'pilot' just shows traces quickly, 'movie' exports videos to
 %movies folder
 
+if nargin < 5
+    doKenBurns = 0;
+end
+
 if nargin < 6
     watchit = 0;
 end
