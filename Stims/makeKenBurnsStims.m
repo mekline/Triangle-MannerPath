@@ -165,7 +165,7 @@ for a=1:length(manners)
                     final_len = size(m_images,4);
 
                     kb_back = zeros(750, 1000, 3, final_len); %height, width, colors, length-in-frames
-                    [kb_x, kb_y] = getKBPath(150, 200, final_len, 60); %30-fast motion 60-slow motion
+                    [kb_x, kb_y] = getKBPath(150, 200, final_len, 45); %30-fast motion 60-super slow motion 45 -just right!
 
                     %this returns a random bounce-around in the box (diff 
                     %between small & big frames)that takes the final # of
@@ -189,21 +189,21 @@ for a=1:length(manners)
                             startDrift = [kb_x(1), kb_y(1)];
                             
                             if isequal(startDrift, [0,0])||isequal(startDrift,[0,100])
+                                mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
+                                my_x = 875;%top lcorner of where to put the shape!
+                                my_y = 600;
+                            elseif isequal(startDrift,[0,200]) || isequal(startDrift, [75,200])
                                 mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
-                                my_x = 500;%top lcorner of where to put the shape!
-                                my_y = 500;
-                            elseif isequal(startDrift, [150,200])||isequal(startDrift,[150,100])
-                                mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
-                                my_x = 50;%top lcorner of where to put the shape!
+                                my_x = 350;%top lcorner of where to put the shape!
+                                my_y = 75;
+                            elseif isequal(startDrift, [150,200])|| isequal(startDrift,[150,100])
+                                mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
+                                my_x = 75;%top lcorner of where to put the shape!
                                 my_y = 0;
-                            elseif isequal(startDrift, [150,0])||isequal(startDrift,[75,0])
-                                mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
+                            elseif isequal(startDrift,[75,0])|| isequal(startDrift,[150,0])
+                                mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
                                 my_x = 0;%top lcorner of where to put the shape!
-                                my_y = 900;
-                            elseif isequal(startDrift, [75,200])||isequal(startDrift,[0,200])
-                                mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
-                                my_x = 500;%top lcorner of where to put the shape!
-                                my_y = 50;
+                                my_y = 625;
                             end
                             
                         end

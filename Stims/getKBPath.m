@@ -11,11 +11,11 @@ function [x, y] = getKBPath(box_x, box_y, lens, lenpath)
 %difference between your movie/img and the ken burns box.
 %Right now it has all the corners and all the midpoints of the edges -
 %movie seems to 'bounce' off the walls.
-points = [box_x box_y;
-    box_x 0;
-    0 box_y;
-    0 0;
+points = [0 box_y;
     box_x floor(box_y/2);
+    box_x box_y;
+    box_x 0;
+    0 0;
     0 floor(box_y/2);
     floor(box_x/2) 0;
     floor(box_x/2) box_y];
@@ -25,8 +25,8 @@ segs = floor(lens/lenpath);
 
 %Where to go? Samples without replacement, so don't have more than 8!
 
-%where = datasample(points, segs+2 , 'Replace',false);
-where = points;
+where = datasample(points, segs+2 , 'Replace',false);
+%where = points; %debug!
 
 x = [];
 y = [];
