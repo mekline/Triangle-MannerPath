@@ -194,7 +194,7 @@ for a=1:length(manners)
                                 my_y = 500;
                             elseif isequal(startDrift, [150,200])||isequal(startDrift,[150,100])
                                 mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
-                                my_x = 500;%top lcorner of where to put the shape!
+                                my_x = 50;%top lcorner of where to put the shape!
                                 my_y = 0;
                             elseif isequal(startDrift, [150,0])||isequal(startDrift,[75,0])
                                 mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object

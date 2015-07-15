@@ -25,7 +25,8 @@ segs = floor(lens/lenpath);
 
 %Where to go? Samples without replacement, so don't have more than 8!
 
-where = datasample(points, segs+2 , 'Replace',false);
+%where = datasample(points, segs+2 , 'Replace',false);
+where = points;
 
 x = [];
 y = [];
