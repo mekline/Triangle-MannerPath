@@ -190,20 +190,20 @@ for a=1:length(manners)
                             
                             if isequal(startDrift, [0,0])||isequal(startDrift,[0,100])
                                 mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
-                                my_x = 875;%top lcorner of where to put the shape!
-                                my_y = 600;
+                                my_x = 625;%top lcorner of where to put the shape!
+                                my_y = 600;%Z
                             elseif isequal(startDrift,[0,200]) || isequal(startDrift, [75,200])
                                 mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
-                                my_x = 350;%top lcorner of where to put the shape!
-                                my_y = 75;
+                                my_x = 350;%Z%top lcorner of where to put the shape!
+                                my_y = 75;%Z
                             elseif isequal(startDrift, [150,200])|| isequal(startDrift,[150,100])
                                 mybar = imread([currentFolder '/img/horz.jpg'],'JPEG'); %read in object
-                                my_x = 75;%top lcorner of where to put the shape!
-                                my_y = 0;
+                                my_x = 75;%Z%top lcorner of where to put the shape!
+                                my_y = 0;%Z
                             elseif isequal(startDrift,[75,0])|| isequal(startDrift,[150,0])
                                 mybar = imread([currentFolder '/img/vert.jpg'],'JPEG'); %read in object
-                                my_x = 0;%top lcorner of where to put the shape!
-                                my_y = 625;
+                                my_x = 0;%Z%top lcorner of where to put the shape!
+                                my_y = 875;
                             end
                             
                         end
