@@ -1,21 +1,22 @@
 function [x, y, lens, bridgeFront] = getPath(pathname)
 
 %Important points in the image (start, 'above', etc.); coded by top lh corner
-points = [300 50; 
+points = [300 50; %starting position
     300 200; 
-    300 250; 
-    300 450;
-    300 650; 
+    300 250; %'to' final pos
+    300 450; %under
+    300 650; %'past' final pos
     300 700; 
     50 450; 
-    100 450; 
+    100 450; %'onto' final pos
     250 450;
     300 600;
     150 550;
     300 300;
-    450 600;
-    450 400];
-
+    450 600; %'underfar' final pos
+    450 400; %Bottom, centered-ish under bridge
+    450 50; %Below starting pos
+    375 500]; %slightly less down, past centered under bridge; 
 switch pathname
     case 'basicOnto'
         %Let's get a (simple) straight line path to animate!
@@ -54,11 +55,34 @@ switch pathname
         y = ones(lens,1)*points(5,2);
         bridgeFront = zeros(lens, 1);
         
-    case 'control4' %In new final pos
+    case 'control4' %In a newly created final pos
         lens = 120;
         x = ones(lens,1)*points(14,1);
         y = ones(lens,1)*points(14,2);
         bridgeFront = zeros(lens, 1);
+        
+    case 'control5' %In 'to' final pos
+        lens = 120;
+        x = ones(lens,1)*points(3,1);
+        y = ones(lens,1)*points(3,2);
+        bridgeFront = zeros(lens, 1);
+    case 'control6' %In 'under' final pos
+        lens = 120;
+        x = ones(lens,1)*points(4,1);
+        y = ones(lens,1)*points(4,2);
+        bridgeFront = zeros(lens, 1);
+    case 'control7' %Below starting position
+        lens = 120;
+        x = ones(lens,1)*points(15,1);
+        y = ones(lens,1)*points(15,2);
+        bridgeFront = zeros(lens, 1);
+        
+    case 'control8' %Very low, under bridge
+        lens = 120;
+        x = ones(lens,1)*points(16,1);
+        y = ones(lens,1)*points(16,2);
+        bridgeFront = zeros(lens, 1);
+                    
         
     %
     %(OK, here's the real ones!)
