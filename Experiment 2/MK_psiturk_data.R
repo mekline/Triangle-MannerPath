@@ -134,6 +134,7 @@ Scores = merge(Scores, bothScores, by=c("participant", "condition"))
 
 #Basic descriptives
 
+#Sanity check! manner and path should be medium, same high and both low
 mean(Scores$samescore)
 mean(Scores$mannerscore)
 mean(Scores$pathscore)
@@ -167,7 +168,7 @@ t.test(Scores[Scores$condition == "Noun",]$diffscore, Scores[Scores$condition ==
 cohensD(Scores[Scores$condition == "Noun",]$diffscore, Scores[Scores$condition == "Verb",]$diffscore)
 
 
-#Time for some regressions
+#Time for some simple regressions (are manner and path scores anti-correlated?)
 nounScores <- Scores[Scores$condition == 'Noun',]
 verbScores <- Scores[Scores$condition == 'Verb',]
 

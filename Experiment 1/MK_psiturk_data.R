@@ -89,8 +89,7 @@ df.long = df.long[order(df.long$participant,df.long$trial),]
 
 #Analyze data!--------------------------------------------------
 
-#For each participant, make a score, which is abs(mean(mannerchange)-mean(pathchange))
-
+#For each participant, make a score, which is abs(mean(mannerchange)-mean(pathchange))  Scores very different from zero indicate a bias
 mannerScores = aggregate(df.long[df.long$stimcondition=="mannerchange",]$keypress, by=list(df.long[df.long$stimcondition=="mannerchange",]$participant, df.long[df.long$stimcondition=="mannerchange",]$condition), mean.na.rm)
 names(mannerScores) = c("participant", "condition", "mannerscore")
 pathScores = aggregate(df.long[df.long$stimcondition=="pathchange",]$keypress, by=list(df.long[df.long$stimcondition=="pathchange",]$participant, df.long[df.long$stimcondition=="pathchange",]$condition), mean.na.rm)
@@ -100,14 +99,13 @@ Scores = merge(mannerScores, pathScores, by=c("participant", "condition"))
 
 Scores$diffscore = abs(Scores$mannerscore - Scores$pathscore)
 with(Scores, tapply(diffscore, list(condition), mean, na.rm=TRUE), drop=TRUE)
-with(Scores, tapply(ILikeMannerscore, list(condition), stderr), drop=TRUE)
+with(Scores, tapply(diffscore, list(condition), stderr), drop=TRUE)
 
 Scores$ILikeMannerscore = Scores$pathscore - Scores$mannerscore
 with(Scores, tapply(ILikeMannerscore, list(condition), mean, na.rm=TRUE), drop=TRUE)
 with(Scores, tapply(ILikeMannerscore, list(condition),stderr), drop=TRUE)
 
 #And let's do a dead simple t test on that
-
 t.test(Scores[Scores$condition == "Noun",]$diffscore, Scores[Scores$condition == "Verb",]$diffscore)
 cohensD(Scores[Scores$condition == "Noun",]$diffscore, Scores[Scores$condition == "Verb",]$diffscore)
 
